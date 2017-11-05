@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.util;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -37,7 +38,6 @@ public class MealsUtil {
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
                 .collect(
                         Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
-//                      Collectors.toMap(Meal::getDate, Meal::getCalories, Integer::sum)
                 );
 
         return meals.stream()
@@ -106,6 +106,27 @@ public class MealsUtil {
     }
 
     public static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
-        return new MealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
+        return new MealWithExceed(meal.getId(),meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
+    }
+
+    public static List<Meal> deleteMeal(int id, List<Meal> meals) {
+        List<Meal> meals1 = new ArrayList<>(meals);
+        meals1.removeIf(x->x.getId() == id);
+        return meals1;
+    }
+
+    public static List<MealWithExceed> getWithExceeded(List<Meal> meals) {
+        Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
+                .collect(
+                        Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
+                );
+
+       /* for (Meal m: meals) {
+            mealsWithExceeded.add(createWithExceed(m, caloriesSumByDate.get(m.getDate())>2000));
+        }
+        return mealsWithExceeded;*/
+
+        return meals.stream()
+                .map(meal -> createWithExceed(meal, caloriesSumByDate.get(meal.getDate()) > 2000)).collect(toList());
     }
 }
