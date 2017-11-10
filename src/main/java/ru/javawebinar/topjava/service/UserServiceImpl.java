@@ -23,6 +23,10 @@ public class UserServiceImpl implements UserService {
     }
 */
 
+    public void setRepository(UserRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public User create(User user) {
         return repository.save(user);
