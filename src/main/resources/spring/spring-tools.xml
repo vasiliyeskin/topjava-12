@@ -18,5 +18,4 @@
                   p:cacheManagerUri="classpath:cache/ehcache.xml"/>
         </property>
     </bean>
-
 </beans>
