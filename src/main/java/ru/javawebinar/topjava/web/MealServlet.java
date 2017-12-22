@@ -78,8 +78,8 @@ public class MealServlet extends HttpServlet {
                 break;
             case "all":
             default:
-                request.setAttribute("meals", mealController.getAll());
-                request.getRequestDispatcher("/meals.jsp").forward(request, response);
+//                request.setAttribute("meals", mealController.getAll());
+//                request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
     }

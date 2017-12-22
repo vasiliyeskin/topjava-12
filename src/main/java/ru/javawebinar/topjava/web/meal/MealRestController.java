@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
@@ -19,7 +22,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
 @Controller
-public class MealRestController {
+public class MealRestController extends AbstractMealController {
     private static final Logger log = LoggerFactory.getLogger(MealRestController.class);
 
     private final MealService service;
@@ -29,22 +32,25 @@ public class MealRestController {
         this.service = service;
     }
 
+    @GetMapping("/meals/{id}")
     public Meal get(int id) {
         int userId = AuthorizedUser.id();
         log.info("get meal {} for user {}", id, userId);
         return service.get(id, userId);
     }
 
+    @DeleteMapping("/meals/{id}")
     public void delete(int id) {
         int userId = AuthorizedUser.id();
         log.info("delete meal {} for user {}", id, userId);
         service.delete(id, userId);
     }
 
-    public List<MealWithExceed> getAll() {
+    @GetMapping
+    public String getAll(Model model) {
         int userId = AuthorizedUser.id();
-        log.info("getAll for user {}", userId);
-        return MealsUtil.getWithExceeded(service.getAll(userId), AuthorizedUser.getCaloriesPerDay());
+        model.addAttribute("meals",MealsUtil.getWithExceeded(service.getAll(userId), AuthorizedUser.getCaloriesPerDay()));
+        return "meals";
     }
 
     public Meal create(Meal meal) {
@@ -67,6 +73,7 @@ public class MealRestController {
      * <li>by time for every date</li>
      * </ol>
      */
+    @GetMapping(value = "/filter")
     public List<MealWithExceed> getBetween(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         int userId = AuthorizedUser.id();
         log.info("getBetween dates({} - {}) time({} - {}) for user {}", startDate, endDate, startTime, endTime, userId);
