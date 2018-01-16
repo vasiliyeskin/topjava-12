@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.service;
 
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
@@ -26,4 +27,6 @@ public interface MealService {
     Meal create(Meal meal, int userId);
 
     Meal getWithUser(int id, int userId);
+
+    void update(MealTo meal, int userId);
 }

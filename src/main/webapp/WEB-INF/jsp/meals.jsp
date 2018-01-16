@@ -75,13 +75,13 @@
                 <th></th>
             </tr>
             </thead>
-            <c:forEach items="${meals}" var="meal">
+            <%--<c:forEach items="${meals}" var="meal">
                 <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>
                 <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
                     <td>
-                            <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
-                            <%--<%=TimeUtil.toString(meal.getDateTime())%>--%>
-                            <%--${fn:replace(meal.dateTime, 'T', ' ')}--%>
+                            &lt;%&ndash;${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}&ndash;%&gt;
+                            &lt;%&ndash;<%=TimeUtil.toString(meal.getDateTime())%>&ndash;%&gt;
+                            &lt;%&ndash;${fn:replace(meal.dateTime, 'T', ' ')}&ndash;%&gt;
                             ${fn:formatDateTime(meal.dateTime)}
                     </td>
                     <td>${meal.description}</td>
@@ -91,7 +91,7 @@
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </a></td>
                 </tr>
-            </c:forEach>
+            </c:forEach>--%>
         </table>
     </div>
 </div>
@@ -101,7 +101,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title" id="modalTitle"><spring:message code="meal.add"/></h2>
+                <h2 class="modal-title" id="modalTitle"><%--<spring:message code="meal.add"/>--%></h2>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" id="detailsForm">
@@ -147,4 +147,14 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
+
+<script type="text/javascript">
+        var i18n = [];
+        i18n["addTitle"] = '<spring:message code="meal.add"/>';
+        i18n["editTitle"] = '<spring:message code="meal.edit"/>';
+
+            <c:forEach var="key" items='<%=new String[]{"common.deleted","common.saved","common.enabled","common.disabled","common.errorStatus"}%>'>
+                i18n["${key}"] = "<spring:message code="${key}"/>";
+        </c:forEach>
+        </script>
 </html>
